@@ -12,6 +12,8 @@ pause='pause'
 running='running'
 -- Highscore file
 highscoreFile = 'highscore'
+--Fonte
+font=love.graphics.newFont('Font.ttf',20)
 
 function love.load()
   newVida()
@@ -23,7 +25,10 @@ function love.load()
   inim.load()
   Shield=love.graphics.newImage("Sprites/Shield.png")
   --Carregar imagens do menu e HUD
-  imenu=love.graphics.newImage('Menu/menu.jpg')
+  imenu=love.graphics.newImage('Menu/menu.jpg') 
+  iDead=love.graphics.newImage('Menu/Dead.jpg')
+  iScore=love.graphics.newImage('HUD/Score.png') 
+  iImortal=love.graphics.newImage('HUD/Imortal.png')
   iinstruc=love.graphics.newImage('Menu/instru.jpg')
   ipause=love.graphics.newImage('HUD/Pause.png') 
   volumemute=love.graphics.newImage('HUD/volume-mute.png')
@@ -70,46 +75,56 @@ function love.update(dt)
 end
 
 function love.draw() 
+  love.graphics.setFont(font)
 --Desenhar o menu e instruções
   if gamestate==menu then
+    love.graphics.setColor(255,255,255)
     love.graphics.draw(imenu,0,0)
   elseif gamestate==instructions then
+    love.graphics.setColor(255,255,255)
     love.graphics.draw(iinstruc,0,0)
 --Tela pausado
-  elseif gamestate==pause then
+elseif gamestate==pause then
+    love.graphics.setColor(255,255,255)
     game_draw()
     Volume_Draw()
     love.graphics.draw(ipause,0,630)
     if gamepause==2 then
+      love.graphics.setColor(255,255,255)
       love.graphics.draw(ivida,1150,10) 
       love.graphics.draw(ivida,vida.x,vida.y,0,0.7)
-    else  love.graphics.draw(ivida,1150,10)
+    else love.graphics.setColor(255,255,255) 
+      love.graphics.draw(ivida,1150,10)
       love.graphics.draw(ivida,1200,10)
     end
 --Qnd morrer mudar a tela
   elseif gamestate==dead  then
     love.graphics.setColor(255,255,255)
-    love.graphics.draw(fundo1,0,0)
-    love.graphics.draw(fundo2,0,70)
+    love.graphics.draw(iDead,0,0)
     Volume_Draw()
-    love.graphics.print('Pressione [ESC] para voltar ao menu'..'\n'..'\n'..'Pressione [ENTER] para começar de novo'..'\n'..'\n'..'score: '..tostring(math.ceil(player.score))..'\n'..'\n'..'highscore: '.. player.hscore,540,200) --math.ceil eh para arredondar o numero para cima, tira o bug do numero 1,99999
+    love.graphics.setColor(200,200,200)
+    love.graphics.print(math.ceil(player.score),125,43) --math.ceil eh para arredondar o numero para cima, tira o bug do numero 1,99999
+    love.graphics.print(player.hscore,185,89)
 --Desenhar a tela no estado q vc tem 2 vidas
   elseif gamestate==playing then
     game_draw()
     Volume_Draw()
+    love.graphics.setColor(255,255,255)
     love.graphics.draw(ivida,1150,10)
     love.graphics.draw(ivida,1200,10)
 --Desenhar a tela no estado que vc tem 1 vida
-  elseif gamestate==running then
+elseif gamestate==running then
     game_draw()
     Volume_Draw()
+    love.graphics.setColor(255,255,255)
     love.graphics.draw(ivida,1150,10)
     love.graphics.draw(ivida,vida.x,vida.y,0,0.7)
   end
 
   if Imortal>0 then
     if gamestate==playing or gamestate==running or gamestate==pause then
-      love.graphics.print('Imortal: '..5-math.ceil(Imortal),1150,50)
+      love.graphics.draw(iImortal,1070,80,0,0.45)
+      love.graphics.print(5-math.ceil(Imortal),1230,83)
       love.graphics.draw(Shield,player.x-55,player.y-10,0,0.4)
     end
   end
@@ -468,12 +483,13 @@ function game_draw()
  inim.draw()
  chubby.draw()
  bambam.draw()
- love.graphics.print('score: '..math.ceil(player.score),600,10,0,1.5)
+ love.graphics.draw(iScore,530,10,0,0.5)
+ love.graphics.print(math.ceil(player.score),600,11.5)
 end
 
 --Função que desenha o simbolo de som (mutado/desmutado)
 function Volume_Draw()
-  if var_audio==0 and var_audio2==0 then 
+  if var_audio<0.05 and var_audio2<0.01 then 
     love.graphics.draw(volumemute,10,10) 
   elseif var_audio==0.05 and var_audio2==0.01 then
     love.graphics.draw(volume1,10,10)
