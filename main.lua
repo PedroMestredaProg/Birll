@@ -108,8 +108,8 @@ function love.draw()
   end
 
   if Imortal>0 then
-    if gamestate==playing or gamestate==running then
-      love.graphics.print('Imortal: '..math.ceil(Imortal),50,50)
+    if gamestate==playing or gamestate==running or gamestate==pause then
+      love.graphics.print('Imortal: '..5-math.ceil(Imortal),1150,50)
       love.graphics.draw(Shield,player.x-55,player.y-10,0,0.4)
     end
   end
@@ -392,8 +392,10 @@ BatataBirl = {
 }
 --Tudo do cenario
   birdx=80
-  Coqueirox=1100
-  Coqueirox2=1900
+  Arvorex=1100
+  Arvorex2=1900
+  Arvorey=290
+  Arvorey1=290
   nuvem1x=1280
   nuvem2x=600
   nuvem3x=900
@@ -410,6 +412,8 @@ BatataBirl = {
   Lanche_random=love.math.random(1,7)
   --Reseta o powerup
   Imortal=0
+  index_arvore1 = love.math.random(1,4)
+  index_arvore = love.math.random(1,4)
 end
 
 --Função que aumenta a velocidade conforme o score sobe
