@@ -4,7 +4,7 @@
   --Função  que define os dados iniciais do bambam
 
 function bambam.load()
-  for x=1,4,1 do
+  for x=1,5,1 do
     bambam[x]=love.graphics.newImage("Sprites/bcorrendo00" .. x .. ".png")
   end
 end
@@ -16,7 +16,7 @@ Bam_anim_time=Bam_anim_time+dt
     Bam_anim_time = 0 -- reinicializa a contagem do tempo
   end
   
-  if Bam_anim_frame > 4 then--reinicia os frames
+  if Bam_anim_frame > 5 then--reinicia os frames
     Bam_anim_frame = 1
   end
 end

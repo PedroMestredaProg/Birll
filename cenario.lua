@@ -38,7 +38,6 @@ end
  love.graphics.draw(Bird,birdx,300)
  love.graphics.draw(arvore[index_arvore],Arvorex,Arvorey,0,1.3)
  love.graphics.draw(arvore[index_arvore1],Arvorex2,Arvorey1,0,1.3)
- love.graphics.print(index_arvore, 100, 100)
  love.graphics.draw(Batata,batata1.x,batata1.y)
  love.graphics.draw(BatataBirli,BatataBirl.x,BatataBirl.y-20,0,0.8)
  love.graphics.draw(Hamburguer,Hamburguer1.x,Hamburguer1.y-5)

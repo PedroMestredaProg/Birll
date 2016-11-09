@@ -42,8 +42,6 @@ function love.load()
  gamepause=0
  --Variavel do lanche no score
  Score_Lanche=0
- --Variavel q define se vc ta sem colisão ou não
- Imortal=0
  --Carregar sons
  Hora_do_show= love.audio.newSource('Audios/start.mp3', 'static')
  Trilha_sonora= love.audio.newSource('Audios/Musica.mp3', 'stream')
@@ -103,8 +101,8 @@ elseif gamestate==pause then
     love.graphics.draw(iDead,0,0)
     Volume_Draw()
     love.graphics.setColor(200,200,200)
-    love.graphics.print(math.ceil(player.score),125,43) --math.ceil eh para arredondar o numero para cima, tira o bug do numero 1,99999
-    love.graphics.print(player.hscore,185,89)
+    love.graphics.print(math.ceil(player.score),125,44) --math.ceil eh para arredondar o numero para cima, tira o bug do numero 1,99999
+    love.graphics.print(player.hscore,185,90)
 --Desenhar a tela no estado q vc tem 2 vidas
   elseif gamestate==playing then
     game_draw()
@@ -279,8 +277,28 @@ function update(dt)
   player.score=player.score+0.1+ Score_Lanche
   difficulty_score(dt)
   Collision_Lanches(dt)
+  Bboss(dt)
 end
 
+function Bboss(dt)
+  if bosspawn>=0 then
+    bosspawn=bosspawn+dt
+  end
+  if bosspawn>1 then
+    bosstimer=bosstimer+dt
+    boss.x=boss.x+(dir*300*dt)
+  end
+  if boss.x>=1000  then
+    dir=-1
+  elseif boss.x<=0 and bosstimer<5 then
+    dir=1
+  end
+  if boss.x<-250 then
+    boss.x=-250
+    bosspawn=0
+    bosstimer=0
+  end
+end
 --Função para definir tudo da vida
 function newVida()
 vida={
@@ -373,6 +391,13 @@ vel_frame=0.11
   w = 100,
   h = 105,
  }
+ --boss
+ boss = {
+  x = -250,
+  y = 100,
+  w = 250,
+  h = 10,
+ }
  --Box1 pedra
  box1 = {
   x = 1300,
@@ -425,10 +450,16 @@ BatataBirl = {
   ini_random=love.math.random(1,2)
   --Randomiza o item que virá
   Lanche_random=love.math.random(1,7)
-  --Reseta o powerup
+ --Variavel q define se vc ta sem colisão ou não
   Imortal=0
   index_arvore1 = love.math.random(1,4)
   index_arvore = love.math.random(1,4)
+  --direção do boss
+  dir=1
+  --Tempo que o boss fica no mapa
+  bosstimer=0
+  --timer pro boss aparecer
+  bosspawn=0
 end
 
 --Função que aumenta a velocidade conforme o score sobe
@@ -484,7 +515,8 @@ function game_draw()
  chubby.draw()
  bambam.draw()
  love.graphics.draw(iScore,530,10,0,0.5)
- love.graphics.print(math.ceil(player.score),600,11.5)
+ love.graphics.print(math.ceil(player.score),600,11.3)
+ love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
 end
 
 --Função que desenha o simbolo de som (mutado/desmutado)
