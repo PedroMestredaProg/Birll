@@ -278,9 +278,13 @@ function update(dt)
   difficulty_score(dt)
   Collision_Lanches(dt)
   Bboss(dt)
+    for i,v in ipairs(whey) do
+      v.y = v.y + 100*dt
+    end
 end
 
 function Bboss(dt)
+  
   if bosspawn>=0 then
     bosspawn=bosspawn+dt
   end
@@ -288,11 +292,22 @@ function Bboss(dt)
     bosstimer=bosstimer+dt
     boss.x=boss.x+(dir*300*dt)
   end
+  
+  if bosstimer>=1 then
+    whey_timer=whey_timer+dt
+  end
+  
+ if whey_timer>=1 then
+   local x=boss.x
+   table.insert(whey,{x=x})
+  end
+  
   if boss.x>=1000  then
     dir=-1
   elseif boss.x<=0 and bosstimer<5 then
     dir=1
   end
+  
   if boss.x<-250 then
     boss.x=-250
     bosspawn=0
@@ -398,6 +413,13 @@ vel_frame=0.11
   w = 250,
   h = 10,
  }
+ --whey
+ whey= {
+   x=0,
+   y=115,
+   w=30,
+   h=10,
+ }
  --Box1 pedra
  box1 = {
   x = 1300,
@@ -458,8 +480,10 @@ BatataBirl = {
   dir=1
   --Tempo que o boss fica no mapa
   bosstimer=0
-  --timer pro boss aparecer
+  --Timer pro boss aparecer
   bosspawn=0
+  --Timer do whey
+  whey_timer=0
 end
 
 --Função que aumenta a velocidade conforme o score sobe
@@ -517,6 +541,12 @@ function game_draw()
  love.graphics.draw(iScore,530,10,0,0.5)
  love.graphics.print(math.ceil(player.score),600,11.3)
  love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
+ love.graphics.print(whey_timer,50,50)
+  if whey_timer>=1 then
+    for i, v in ipairs(whey) do
+      love.graphics.rectangle('fill',v.x,v.y,whey.w,whey.h)
+    end
+  end
 end
 
 --Função que desenha o simbolo de som (mutado/desmutado)
