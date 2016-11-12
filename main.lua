@@ -14,7 +14,6 @@ running='running'
 highscoreFile = 'highscore'
 --Fonte
 font=love.graphics.newFont('Font.ttf',20)
-
 function love.load()
   newVida()
   reset(dt)
@@ -278,9 +277,9 @@ function update(dt)
   difficulty_score(dt)
   Collision_Lanches(dt)
   Bboss(dt)
-    for i,v in ipairs(whey) do
-      v.y = v.y + 100*dt
-    end
+  for i,v in ipairs(whey) do
+    v.y = v.y + 100*dt
+  end
 end
 
 function Bboss(dt)
@@ -297,9 +296,10 @@ function Bboss(dt)
     whey_timer=whey_timer+dt
   end
   
- if whey_timer>=1 then
-   local x=boss.x
-   table.insert(whey,{x=x})
+  if whey_timer >= 5 then
+    local x=boss.x
+    table.insert(whey,{x=x, y=115})
+    whey_timer = 0
   end
   
   if boss.x>=1000  then
@@ -415,8 +415,6 @@ vel_frame=0.11
  }
  --whey
  whey= {
-   x=0,
-   y=115,
    w=30,
    h=10,
  }
