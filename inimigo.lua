@@ -8,7 +8,7 @@ function inim.load()
   for x=1,4,1 do
     inim[x]=love.graphics.newImage("Sprites/bmcorrendo00" .. x .. ".png")
   end
-vel_box=0
+  vel_box=0
 end
 
 function inim.update(dt)
@@ -23,14 +23,11 @@ function inim.update(dt)
     box1.x=1300
     inim1.x=1300 
  end
- 
-inim_anim_time=inim_anim_time+dt
+  inim_anim_time=inim_anim_time+dt
   if inim_anim_time > 0.09 then -- quando acumular mais de 0.1
     inim_anim_frame = inim_anim_frame + 1 -- avança para proximo frame
     inim_anim_time = 0 -- reinicializa a contagem do tempo
   end
-  
-  
   if inim_anim_frame > 4 then--reinicia os frames
     inim_anim_frame = 1
   end

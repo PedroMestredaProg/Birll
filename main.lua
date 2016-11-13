@@ -71,6 +71,7 @@ function love.update(dt)
   end
 end
 
+
 function love.draw() 
   love.graphics.setFont(font)
 --Desenhar o menu e instruções
@@ -81,7 +82,7 @@ function love.draw()
     love.graphics.setColor(255,255,255)
     love.graphics.draw(iinstruc,0,0)
 --Tela pausado
-elseif gamestate==pause then
+  elseif gamestate==pause then
     love.graphics.setColor(255,255,255)
     game_draw()
     Volume_Draw()
@@ -110,14 +111,14 @@ elseif gamestate==pause then
     love.graphics.draw(ivida,1150,10)
     love.graphics.draw(ivida,1200,10)
 --Desenhar a tela no estado que vc tem 1 vida
-elseif gamestate==running then
+  elseif gamestate==running then
     game_draw()
     Volume_Draw()
     love.graphics.setColor(255,255,255)
     love.graphics.draw(ivida,1150,10)
     love.graphics.draw(ivida,vida.x,vida.y,0,0.7)
   end
-
+--Desenhar o escudo e o contador do tempo imortal
   if Imortal>0 then
     if gamestate==playing or gamestate==running or gamestate==pause then
       love.graphics.draw(iImortal,1070,80,0,0.45)
@@ -126,6 +127,7 @@ elseif gamestate==running then
     end
   end
 end
+
 
 function love.keypressed(key)
 --iniciar o jogo qnd apertar enter 
@@ -142,7 +144,6 @@ function love.keypressed(key)
       love.audio.play(que_n_vai_da)
       reset(dt)
     end
-
 --Fechar o jogo, ou voltar pro Menu, qnd aperta esc
   elseif key=='escape' then
     if gamestate==instructions or gamestate==dead or gamestate==pause or gamestate==playing or gamestate==running then
@@ -151,7 +152,6 @@ function love.keypressed(key)
     elseif gamestate==menu  then
       love.event.quit()
     end
-
 --pausar o jogo
   elseif key=='p' then
     if gamestate==playing  then
@@ -171,11 +171,9 @@ function love.keypressed(key)
       gamestate=running
       love.audio.resume( )
     end
-  
 --Entrar em instruções
   elseif key=='i' and gamestate==menu then
     gamestate=instructions
-
 --fazer o chubby pular
   elseif player.y==490 then
     if key=='space' or key=='up'or key=='w' then
@@ -192,10 +190,12 @@ function love.keypressed(key)
     end
   end
 end
+
+
 --Função que carrega td que é necessario qnd se da play
 function onPlaying(dt)
  --Carregar tds funçoes update
-update(dt)
+  update(dt)
  --Se ocorrer colisão com inimigo ou obstaculo, o Game State recebe running, onde o bambam aparece
   if Imortal==0 then
     for i, v in ipairs(whey) do
@@ -222,30 +222,19 @@ update(dt)
   end
 end
 
---Função para definir td que acontece qnd vc morre
-function onDead()
-gamestate=dead
-love.audio.play(vai_da_nao)
-love.audio.stop(Hora_do_show)
---Vai escrever o Hscore se o score for maior q o hscore
-  if (player.hscore < player.score) then
-    writeHighscore() 
-  end
-end
-
 function onrunning(dt)
-update(dt)
+  update(dt)
 --A vida vai começar a se mover
-vida.x=vida.x-(700*dt)
+  vida.x=vida.x-(700*dt)
 --Se o player n pegar a vida e ela sair da tela, ela volta pra sua posição inicial
   if vida.x<-150 then
     vida.x=10000
   end
 --A velocidade de frame do chubby aumenta até o bambam estar na posição dele, isso faz parecer que o chubby desacelerou qnd colidiu
 --Vai diminuir a velocidade dos objetos pq o chubby colide e desacelera
-collide_vel()
+  collide_vel()
 --Bambam começa a andar na direção do Chubby
-bambam1.x=bambam1.x+(600*dt)
+  bambam1.x=bambam1.x+(600*dt)
 --Bambam qnd chegar nessa posição vai parar, e tds as velocidades voltam ao normal
   if bambam1.x>=300 then
     bambam1.x=300
@@ -271,6 +260,19 @@ bambam1.x=bambam1.x+(600*dt)
     onDead()
   end
 end
+
+--Função para definir td que acontece qnd vc morre
+function onDead()
+  gamestate=dead
+  love.audio.play(vai_da_nao)
+  love.audio.stop(Hora_do_show)
+--Vai escrever o Hscore se o score for maior q o hscore
+  if (player.hscore < player.score) then
+    writeHighscore() 
+  end
+end
+
+
 --Carrega tds os .update, implementa a soma do score e a dificuldade aumentando conforme o score aumenta
 function update(dt)
   chubby.update(dt)
@@ -286,12 +288,12 @@ function update(dt)
   end
 end
 
+
 function Bboss(dt)
-  
   if bosspawn>=0 then
     bosspawn=bosspawn+dt
   end
-  if bosspawn>10 then
+  if bosspawn>15 then
     bosstimer=bosstimer+dt
     boss.x=boss.x+(dir*300*dt)
   end
@@ -318,16 +320,7 @@ function Bboss(dt)
     bosstimer=0
   end
 end
---Função para definir tudo da vida
-function newVida()
-vida={
-  x=10000,
-  y=425,
-  w=30,
-  h=30,
-}
-vel_vida=700
-end
+
 
 --Função para checar colisão
 function CheckCollision(x1,y1,w1,h1,x2,y2,w2,h2)
@@ -338,6 +331,7 @@ end
 function Collision_Inimigos()
   return CheckCollision(player.x, player.y, player.w,player.h, box1.x, box1.y, box1.w, box1.h) or CheckCollision(player.x, player.y, player.w,player.h, inim1.x, inim1.y, inim1.w, inim1.h)
 end
+
 
 --Função colisão lanchinhos
 function Collision_Lanches(dt)
@@ -380,80 +374,85 @@ function Collision_Lanches(dt)
   end
 end
 
---Função que para os audios
-function stop_audio()
-  love.audio.stop(que_n_vai_da)
-  love.audio.stop(vai_da_nao)
-  love.audio.stop(Hora_do_show)
-  love.audio.stop(Birll)
-  love.audio.stop(jaula)
-  love.audio.stop(Trilha_sonora)
+
+--Função para definir tudo da vida
+function newVida()
+  vida={
+    x=10000,
+    y=425,
+    w=30,
+    h=30,
+  }
+  vel_vida=700
 end
 
 --Função que define a posição inicial de tudo do jogo, ela é chamada no menu e na tela de morto, serve pra resetar a posição de tudo
 function reset(dt)
- --Chubby
- player={  
-  x = 0,
-  ys = 0,
-  y = 490,
-  w = 80,
-  h = 140,
-  score=0,
-  hscore=readHighscore()
-}
-vel_frame=0.11
- --Bambam
- bambam1 = {
-  x = -700,
-  y = 470,
-  w = 100,
-  h = 105,
- }
- --boss
- boss = {
-  x = -250,
-  y = 100,
-  w = 250,
-  h = 10,
- }
- --whey
- whey= {
-   w=30,
-   h=10,
- }
- --Box1 pedra
- box1 = {
-  x = 1300,
-  y = 580,
-  w = 330,
-  h = 90,
- }
- --Bambamminion
+--Chubby
+  player={  
+    x = 0,
+    ys = 0,
+    y = 490,
+    w = 80,
+    h = 140,
+    score=0,
+    hscore=readHighscore()
+  }
+  vel_frame=0.11
+--Bambam
+  bambam1 = {
+    x = -700,
+    y = 470,
+    w = 100,
+    h = 105,
+  }
+--boss
+  boss = {
+    x = -250,
+    y = 100,
+    w = 250,
+    h = 10,
+  }
+--whey
+  whey= {
+    w=30,
+    h=10,
+  }
+--Box1 pedra
+  box1 = {
+    x = 1300,
+    y = 580,
+    w = 330,
+    h = 90,
+  }
+--Bambamminion
   inim1 = {
-  x = 1800,
-  y = 537,
-  w = 50,
-  h = 105,
-}
-batata1 = {
-  x=5000,
-  y=425,
-  w=35,
-  h=40,
-}
-Hamburguer1 = {
-  x=5000,
-  y=430,
-  w=35,
-  h=40,
-}
-BatataBirl = {
-  x=5000,
-  y=420,
-  w=80,
-  h=60,
-}
+    x = 1800,
+    y = 537,
+    w = 50,
+    h = 105,
+  }
+--Lanchinhos
+  batata1 = {
+    x=5000,
+    y=425,
+    w=35,
+    h=40,
+  }
+  
+  Hamburguer1 = {
+    x=5000,
+    y=430,
+    w=35,
+    h=40,
+  }
+  
+  BatataBirl = {
+    x=5000,
+    y=420,
+    w=80,
+    h=60,
+  }
 --Tudo do cenario
   birdx=80
   Arvorex=1100
@@ -487,6 +486,7 @@ BatataBirl = {
   --Timer do whey
   whey_timer=0
 end
+
 
 --Função que aumenta a velocidade conforme o score sobe
 function difficulty_score(dt)
@@ -534,16 +534,17 @@ function collide_vel()
   end
 end
   
+  
 --Função que desenha o jogo no pause e playing
 function game_draw()
- cenario.draw()
- inim.draw()
- chubby.draw()
- bambam.draw()
- love.graphics.draw(iScore,530,10,0,0.5)
- love.graphics.print(math.ceil(player.score),600,11.3)
- love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
- love.graphics.print(whey_timer,50,50)
+  cenario.draw()
+  inim.draw()
+  chubby.draw()
+  bambam.draw()
+  love.graphics.draw(iScore,530,10,0,0.5)
+  love.graphics.print(math.ceil(player.score),600,11.3)
+  love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
+  love.graphics.print(whey_timer,50,50)
   if whey_timer>=0 then
     for i, v in ipairs(whey) do
       love.graphics.rectangle('fill',v.x,v.y,whey.w,whey.h)
@@ -560,23 +561,35 @@ function Volume_Draw()
   end
 end
 
+
 --Função que define o volume dos audios
 function Audio_Volume()
- if gamestate ~= nil then 
-  Hora_do_show:setVolume(var_audio)
-  que_n_vai_da:setVolume(var_audio)
-  jaula:setVolume(var_audio)
-  vai_da_nao:setVolume(var_audio)
-  Trilha_sonora:setVolume(var_audio2)
-  iuuu:setVolume(var_audio)
-  Birll:setVolume(var_audio)
-  Bodybuilding:setVolume(var_audio)
+  if gamestate ~= nil then 
+    Hora_do_show:setVolume(var_audio)
+    que_n_vai_da:setVolume(var_audio)
+    jaula:setVolume(var_audio)
+    vai_da_nao:setVolume(var_audio)
+    Trilha_sonora:setVolume(var_audio2)
+    iuuu:setVolume(var_audio)
+    Birll:setVolume(var_audio)
+    Bodybuilding:setVolume(var_audio)
+  end
 end
+
+--Função que para os audios
+function stop_audio()
+  love.audio.stop(que_n_vai_da)
+  love.audio.stop(vai_da_nao)
+  love.audio.stop(Hora_do_show)
+  love.audio.stop(Birll)
+  love.audio.stop(jaula)
+  love.audio.stop(Trilha_sonora)
 end
+
 
 --Função que escreve o highscore
 function writeHighscore()
-love.filesystem.write(highscoreFile, math.ceil(player.score), all)
+  love.filesystem.write(highscoreFile, math.ceil(player.score), all)
 end
 
 --Carrega o hscore que foi salvo no arquivo de texo, e se n existir o arquivo, cria um

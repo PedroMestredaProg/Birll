@@ -1,8 +1,6 @@
-  bambam={}
+bambam={}
   local Bam_anim_time = 0
   local Bam_anim_frame = 1
-  --Função  que define os dados iniciais do bambam
-
 function bambam.load()
   for x=1,5,1 do
     bambam[x]=love.graphics.newImage("Sprites/bcorrendo00" .. x .. ".png")
@@ -10,7 +8,7 @@ function bambam.load()
 end
 
 function bambam.update(dt)
-Bam_anim_time=Bam_anim_time+dt
+  Bam_anim_time=Bam_anim_time+dt
   if Bam_anim_time > 0.09 then -- quando acumular mais de 0.1
     Bam_anim_frame = Bam_anim_frame + 1 -- avança para proximo frame
     Bam_anim_time = 0 -- reinicializa a contagem do tempo
@@ -22,6 +20,6 @@ Bam_anim_time=Bam_anim_time+dt
 end
 
 function bambam.draw()
-love.graphics.setColor(255,255,255)
-love.graphics.draw(bambam[Bam_anim_frame],bambam1.x,bambam1.y)
+  love.graphics.setColor(255,255,255)
+  love.graphics.draw(bambam[Bam_anim_frame],bambam1.x,bambam1.y)
 end
