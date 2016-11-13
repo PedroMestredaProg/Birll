@@ -198,14 +198,16 @@ function onPlaying(dt)
 update(dt)
  --Se ocorrer colisão com inimigo ou obstaculo, o Game State recebe running, onde o bambam aparece
   if Imortal==0 then
-    if Collision_Inimigos() then 
-      gamestate=running
-      love.audio.stop(que_n_vai_da)
-      love.audio.stop(vai_da_nao)
-      love.audio.stop(Hora_do_show)
-      love.audio.play(jaula)
-    elseif CheckCollision(player.x, player.y, player.w,player.h, bambam1.x, bambam1.y, bambam1.w, bambam1.h) then
-      onDead()
+    for i, v in ipairs(whey) do
+      if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) or Collision_Inimigos() then
+        gamestate=running
+        love.audio.stop(que_n_vai_da)
+        love.audio.stop(vai_da_nao)
+        love.audio.stop(Hora_do_show)
+        love.audio.play(jaula)
+      elseif CheckCollision(player.x, player.y, player.w,player.h, bambam1.x, bambam1.y, bambam1.w, bambam1.h) then
+        onDead()
+      end
     end
   end
 --Esse if serve pra fazer o bambam sempre estar indo pra esquerda, e só ir para direita qnd gamestate ta running, onde o bambam ta na tela. Se o personagem pega a vida, o Game state volta pra playing, e o bambam vai voltar a andar pra esquerda,  até sair da tela
@@ -258,8 +260,10 @@ bambam1.x=bambam1.x+(600*dt)
 --Se o player colidir com o bambam ou obstaculos/inimigos, ele perde
   if Imortal==0 then
     if  bambam1.x==300 then
-      if Collision_Inimigos() then 
-        onDead()
+      for i, v in ipairs(whey) do
+        if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) or Collision_Inimigos() then 
+          onDead()
+        end
       end
     end
   end
@@ -278,7 +282,7 @@ function update(dt)
   Collision_Lanches(dt)
   Bboss(dt)
   for i,v in ipairs(whey) do
-    v.y = v.y + 100*dt
+    v.y = v.y + 400*dt
   end
 end
 
@@ -287,16 +291,16 @@ function Bboss(dt)
   if bosspawn>=0 then
     bosspawn=bosspawn+dt
   end
-  if bosspawn>1 then
+  if bosspawn>10 then
     bosstimer=bosstimer+dt
     boss.x=boss.x+(dir*300*dt)
   end
   
-  if bosstimer>=1 then
+  if bosstimer>0 then
     whey_timer=whey_timer+dt
   end
   
-  if whey_timer >= 5 then
+  if whey_timer >= 1 then
     local x=boss.x
     table.insert(whey,{x=x, y=115})
     whey_timer = 0
@@ -304,7 +308,7 @@ function Bboss(dt)
   
   if boss.x>=1000  then
     dir=-1
-  elseif boss.x<=0 and bosstimer<5 then
+  elseif boss.x<=0 and bosstimer<15 then
     dir=1
   end
   
@@ -540,7 +544,7 @@ function game_draw()
  love.graphics.print(math.ceil(player.score),600,11.3)
  love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
  love.graphics.print(whey_timer,50,50)
-  if whey_timer>=1 then
+  if whey_timer>=0 then
     for i, v in ipairs(whey) do
       love.graphics.rectangle('fill',v.x,v.y,whey.w,whey.h)
     end
