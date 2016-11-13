@@ -199,15 +199,14 @@ function onPlaying(dt)
  --Se ocorrer colisão com inimigo ou obstaculo, o Game State recebe running, onde o bambam aparece
   if Imortal==0 then
     for i, v in ipairs(whey) do
-      if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) or Collision_Inimigos() then
-        gamestate=running
-        love.audio.stop(que_n_vai_da)
-        love.audio.stop(vai_da_nao)
-        love.audio.stop(Hora_do_show)
-        love.audio.play(jaula)
-      elseif CheckCollision(player.x, player.y, player.w,player.h, bambam1.x, bambam1.y, bambam1.w, bambam1.h) then
-        onDead()
+      if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) then
+        collide_onPlaying()
       end
+    end
+    if Collision_Inimigos() then
+      collide_onPlaying()
+    elseif CheckCollision(player.x, player.y, player.w,player.h, bambam1.x, bambam1.y, bambam1.w, bambam1.h) then
+      onDead()
     end
   end
 --Esse if serve pra fazer o bambam sempre estar indo pra esquerda, e só ir para direita qnd gamestate ta running, onde o bambam ta na tela. Se o personagem pega a vida, o Game state volta pra playing, e o bambam vai voltar a andar pra esquerda,  até sair da tela
@@ -250,9 +249,12 @@ function onrunning(dt)
   if Imortal==0 then
     if  bambam1.x==300 then
       for i, v in ipairs(whey) do
-        if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) or Collision_Inimigos() then 
+        if CheckCollision(player.x, player.y, player.w,player.h,v.x,v.y,whey.w,whey.h) then 
           onDead()
         end
+      end
+      if Collision_Inimigos() then
+        onDead()
       end
     end
   end
@@ -512,6 +514,14 @@ function difficulty_score(dt)
     vel_box=700
     vel_frame=0.115
   end
+end
+
+function collide_onPlaying()
+  gamestate=running
+  love.audio.stop(que_n_vai_da)
+  love.audio.stop(vai_da_nao)
+  love.audio.stop(Hora_do_show)
+  love.audio.play(jaula)
 end
 
 --Função que diminui a velocidade dos objetos no momento que voce colidiu e o bambam ainda n esta em sua posição
