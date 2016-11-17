@@ -32,6 +32,8 @@ function love.load()
   ipause=love.graphics.newImage('HUD/Pause.png') 
   volumemute=love.graphics.newImage('HUD/volume-mute.png')
   volume1=love.graphics.newImage('HUD/volume1.png')
+  Iboss=love.graphics.newImage('Sprites/BamBamVoadorAlado.png')
+  Iwhey=love.graphics.newImage('Cenario/Whey2.png')
  --botar o nome do jogo e o tamanho da tela
  love.window.setTitle('The Birl Fever')
  love.window.setMode(1280,720)
@@ -305,19 +307,19 @@ function Bboss(dt)
   end
   
   if whey_timer >= 1 then
-    local x=boss.x
+    local x=boss.x+100
     table.insert(whey,{x=x, y=115})
     whey_timer = 0
   end
   
   if boss.x>=1000  then
     dir=-1
-  elseif boss.x<=0 and bosstimer<15 then
+  elseif boss.x<=-100 and bosstimer<15 then
     dir=1
   end
   
-  if boss.x<-250 then
-    boss.x=-250
+  if boss.x<-294 then
+    boss.x=-294
     bosspawn=0
     bosstimer=0
   end
@@ -410,15 +412,15 @@ function reset(dt)
   }
 --boss
   boss = {
-    x = -250,
+    x = -294,
     y = 100,
     w = 250,
     h = 10,
   }
 --whey
   whey= {
-    w=30,
-    h=10,
+    w=50,
+    h=67,
   }
 --Box1 pedra
   box1 = {
@@ -553,11 +555,11 @@ function game_draw()
   bambam.draw()
   love.graphics.draw(iScore,530,10,0,0.5)
   love.graphics.print(math.ceil(player.score),600,11.3)
-  love.graphics.rectangle('fill',boss.x,boss.y,boss.w,boss.h)
+  love.graphics.draw(Iboss,boss.x,boss.y,0,0.7)
   love.graphics.print(whey_timer,50,50)
   if whey_timer>=0 then
     for i, v in ipairs(whey) do
-      love.graphics.rectangle('fill',v.x,v.y,whey.w,whey.h)
+      love.graphics.draw(Iwhey,v.x,v.y)
     end
   end
 end
