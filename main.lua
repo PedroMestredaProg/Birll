@@ -5,6 +5,8 @@ require('inimigo')
 --Definindo todos os Game states
 playing='playing'
 menu='menu'
+nome='nome'
+ranking='ranking'
 instructions='instructions'
 dead='dead'
 pause='pause'
@@ -38,7 +40,7 @@ function love.load()
  love.window.setTitle('The Birl Fever')
  love.window.setMode(1280,720)
  --O jogo começa no Game state Menu
- gamestate=menu
+ gamestate=nome
  --Variavel que define qual o modo do game pause, para poder diferenciar qnd o Game state ta playing ou running
  gamepause=0
  --Variavel do lanche no score
@@ -55,10 +57,20 @@ function love.load()
   --Variaveis que definem o volume
  var_audio=0.05
  var_audio2=0.01
+ heronameinput = "off"
+ heroname=''
+ heroname_size = 0
+ love.keyboard.setKeyRepeat(true)
 end
+
 
 function love.update(dt)
   Audio_Volume()
+--Escrever seu nome na tela inicial
+  if gamestate==nome then
+    heronameinput = "on"
+  else  heronameinput = "off"
+  end
 --Quando estiver rodando o jogo 
   if gamestate==playing then
     onPlaying(dt)
@@ -83,6 +95,17 @@ function love.draw()
   elseif gamestate==instructions then
     love.graphics.setColor(255,255,255)
     love.graphics.draw(iinstruc,0,0)
+--Tela para digitar o nome
+  elseif gamestate==nome then
+    love.graphics.setColor(255,255,255)
+    love.graphics.draw(fundo1,0,0)
+    love.graphics.draw(fundo2,0,0)
+    love.graphics.print('Escreva seu nome',540,365)
+    love.graphics.print(heroname, 540,400)
+  elseif gamestate==ranking then
+    love.graphics.setColor(255,255,255)
+    love.graphics.draw(fundo1,0,0)
+    love.graphics.draw(fundo2,0,0)
 --Tela pausado
   elseif gamestate==pause then
     love.graphics.setColor(255,255,255)
@@ -145,10 +168,12 @@ function love.keypressed(key)
       love.audio.stop(vai_da_nao)
       love.audio.play(que_n_vai_da)
       reset(dt)
+    elseif gamestate==nome and heroname~='' then
+      gamestate=menu
     end
 --Fechar o jogo, ou voltar pro Menu, qnd aperta esc
   elseif key=='escape' then
-    if gamestate==instructions or gamestate==dead or gamestate==pause or gamestate==playing or gamestate==running then
+    if gamestate==instructions or gamestate==dead or gamestate==pause or gamestate==playing or    gamestate==running or gamestate==ranking then
       gamestate=menu
       stop_audio()
     elseif gamestate==menu  then
@@ -176,19 +201,30 @@ function love.keypressed(key)
 --Entrar em instruções
   elseif key=='i' and gamestate==menu then
     gamestate=instructions
---fazer o chubby pular
-  elseif player.y==490 then
-    if key=='space' or key=='up'or key=='w' then
-      player.ys=-765
-    end
-  end
-  if key=='m' then
+  elseif key=='m' then
     if var_audio==0 and var_audio2==0 then
       var_audio=0.05
       var_audio2=0.01
     elseif var_audio==0.05 and var_audio2==0.01 then
       var_audio=0
       var_audio2=0
+    end
+--Tela de ranking
+  elseif key=='l' then
+    if gamestate==menu then
+      gamestate=ranking
+    end
+--fazer o chubby pular
+  elseif player.y==490 then
+    if key=='space' or key=='up'or key=='w' then
+      player.ys=-765
+    end
+  end
+  
+  if key == 'backspace' then
+    if gamestate==nome then
+        heroname_size = heroname_size - 1
+        heroname = string.sub(heroname, 1, heroname_size)
     end
   end
 end
@@ -426,7 +462,7 @@ function reset(dt)
   box1 = {
     x = 1300,
     y = 580,
-    w = 330,
+    w = 260,
     h = 90,
   }
 --Bambamminion
@@ -556,7 +592,7 @@ function game_draw()
   love.graphics.draw(iScore,530,10,0,0.5)
   love.graphics.print(math.ceil(player.score),600,11.3)
   love.graphics.draw(Iboss,boss.x,boss.y,0,0.7)
-  love.graphics.print(whey_timer,50,50)
+  love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), 10, 40)
   if whey_timer>=0 then
     for i, v in ipairs(whey) do
       love.graphics.draw(Iwhey,v.x,v.y)
@@ -598,6 +634,17 @@ function stop_audio()
   love.audio.stop(Trilha_sonora)
 end
 
+
+function love.textinput(t)
+  heroname_size = #heroname
+  if heronameinput == "on" then
+    heroname = heroname .. t
+    heroname_size = heroname_size + 1
+  end
+  if heronameinput == "off" then
+    heroname = heroname
+  end
+end
 
 --Função que escreve o highscore
 function writeHighscore()

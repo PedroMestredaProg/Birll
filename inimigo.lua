@@ -38,6 +38,5 @@ function inim.draw()
  love.graphics.draw(stone,box1.x,box1.y,0,2.5)
  love.graphics.draw(stone,box1.x+80,box1.y,0,2.5)
  love.graphics.draw(stone,box1.x+160,box1.y,0,2.5)
- love.graphics.draw(stone,box1.x+240,box1.y,0,2.5)
  love.graphics.draw(inim[inim_anim_frame],inim1.x,inim1.y-7)
 end
