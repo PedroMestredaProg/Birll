@@ -40,7 +40,7 @@ function love.load()
  love.window.setTitle('The Birl Fever')
  love.window.setMode(1280,720)
  --O jogo começa no Game state Menu
- gamestate=nome
+ gamestate=menu
  --Variavel que define qual o modo do game pause, para poder diferenciar qnd o Game state ta playing ou running
  gamepause=0
  --Variavel do lanche no score
