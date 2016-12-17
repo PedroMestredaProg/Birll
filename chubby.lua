@@ -25,7 +25,7 @@ function chubby.update(dt)
     player.x=1050
   end
 --'gravidade'
-  player.ys=player.ys+40
+  player.ys=player.ys+(dt*1900)
 --Player.y agr tem um player.ys. Isso é feito para ele poder pular
   player.y=player.y+(player.ys*dt)
   if player.y>=490 then

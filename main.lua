@@ -217,7 +217,7 @@ function love.keypressed(key)
 --fazer o chubby pular
   elseif player.y==490 then
     if key=='space' or key=='up'or key=='w' then
-      player.ys=-765
+      player.ys=-700
     end
   end
   
@@ -319,7 +319,7 @@ function update(dt)
   cenario.update(dt)
   bambam.update(dt)
   inim.update(dt)
-  player.score=player.score+0.1+ Score_Lanche
+  player.score=player.score+(dt * 5.5)+ Score_Lanche
   difficulty_score(dt)
   Collision_Lanches(dt)
   Bboss(dt)
