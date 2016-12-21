@@ -21,6 +21,7 @@ function love.load()
   reset(dt)
   Audio_Volume()
   chubby.load()
+  BossDificult(dt)
   cenario.load()
   bambam.load()
   inim.load()
@@ -30,7 +31,7 @@ function love.load()
   iDead=love.graphics.newImage('Menu/Dead.jpg')
   iScore=love.graphics.newImage('HUD/Score.png') 
   iImortal=love.graphics.newImage('HUD/Imortal.png')
-  iinstruc=love.graphics.newImage('Menu/instru.jpg')
+  iinstruc=love.graphics.newImage('Menu/Instru.jpg')
   ipause=love.graphics.newImage('HUD/Pause.png') 
   volumemute=love.graphics.newImage('HUD/volume-mute.png')
   volume1=love.graphics.newImage('HUD/volume1.png')
@@ -46,10 +47,10 @@ function love.load()
  --Variavel do lanche no score
  Score_Lanche=0
  --Carregar sons
- Hora_do_show= love.audio.newSource('Audios/start.mp3', 'static')
+ Hora_do_show= love.audio.newSource('Audios/Start.mp3', 'static')
  Trilha_sonora= love.audio.newSource('Audios/Musica.mp3', 'stream')
  Birll= love.audio.newSource('Audios/birl.mp3', 'static')
- vai_da_nao=love.audio.newSource('Audios/vai_da_n.mp3','static')
+ vai_da_nao=love.audio.newSource('Audios/Vai_da_n.mp3','static')
  que_n_vai_da=love.audio.newSource('Audios/que_n_vai_da.mp3','static')
  jaula= love.audio.newSource('Audios/Ta saindo da jaula.mp3', 'static') 
  iuuu= love.audio.newSource('Audios/iuuu.mp3', 'static')
@@ -61,6 +62,7 @@ function love.load()
  heroname=''
  heroname_size = 0
  love.keyboard.setKeyRepeat(true)
+ BossDificultt=15
 end
 
 
@@ -350,7 +352,7 @@ function Bboss(dt)
   
   if boss.x>=1000  then
     dir=-1
-  elseif boss.x<=-100 and bosstimer<15 then
+  elseif boss.x<=-100 and bosstimer<BossDificultt then
     dir=1
   end
   
@@ -527,6 +529,13 @@ function reset(dt)
   whey_timer=0
 end
 
+function BossDificult(dt)
+  if player.score>430 then
+    BossDificultt=25
+  elseif player.score>230 then
+    BossDificultt=20
+  end
+end
 
 --Função que aumenta a velocidade conforme o score sobe
 function difficulty_score(dt)
@@ -645,6 +654,7 @@ function love.textinput(t)
     heroname = heroname
   end
 end
+
 
 --Função que escreve o highscore
 function writeHighscore()
