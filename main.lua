@@ -94,6 +94,9 @@ function love.draw()
   if gamestate==menu then
     love.graphics.setColor(255,255,255)
     love.graphics.draw(imenu,0,0)
+    --x = 5,y = 500,w = 75,h = 130,
+    love.graphics.rectangle('fill',5,513,75,130)
+    love.graphics.draw(chubby[1], player.x-5, player.y-13)
   elseif gamestate==instructions then
     love.graphics.setColor(255,255,255)
     love.graphics.draw(iinstruc,0,0)
@@ -150,7 +153,7 @@ function love.draw()
     if gamestate==playing or gamestate==running or gamestate==pause then
       love.graphics.draw(iImortal,1070,80,0,0.45)
       love.graphics.print(5-math.ceil(Imortal),1230,83)
-      love.graphics.draw(Shield,player.x-55,player.y-10,0,0.4)
+      love.graphics.draw(Shield,player.x-60,player.y-10,0,0.4)
     end
   end
 end
@@ -431,12 +434,12 @@ end
 --Função que define a posição inicial de tudo do jogo, ela é chamada no menu e na tela de morto, serve pra resetar a posição de tudo
 function reset(dt)
 --Chubby
-  player={  
-    x = 0,
+  player={ 
+    x = 5,
     ys = 0,
-    y = 490,
-    w = 80,
-    h = 140,
+    y = 513,
+    w = 75,
+    h = 130,
     score=0,
     hscore=readHighscore()
   }
@@ -446,7 +449,7 @@ function reset(dt)
     x = -700,
     y = 470,
     w = 100,
-    h = 105,
+    h = 180,
   }
 --boss
   boss = {
